@@ -9,10 +9,10 @@ require_relative "models/dokku.rb"
 pastel = Pastel.new
 prompt = TTY::Prompt.new(active_color: :yellow, interrupt: :exit)
 
-divider = "============================================================================\n"
+divider = "============================================================================\n\n"
 
-app = prompt.ask("Name of the app:") { |q| q.required true }
-domain = prompt.ask("Domain:") { |q| q.required true }
+app = prompt.ask("Name of the app:") { |q| q.required(true) }
+domain = prompt.ask("Domain:") { |q| q.required(true) }
 
 tools = [
   "Postgresql",
@@ -25,7 +25,11 @@ selected_tools = prompt.multi_select("Choose the tools you will need", tools,
 postgresql = selected_tools.include?("Postgresql")
 redis = selected_tools.include?("Redis")
 
-https = prompt.yes?("Do you need a SSL certificate?")
+ssl = prompt.yes?("Do you need a SSL certificate?")
+
+if ssl
+  email = prompt.ask("SSL requires an email address:") { |q| q.required(true) }
+end
 
 puts ""
 puts "Environment variables"
@@ -44,10 +48,11 @@ env_vars = prompt.multiline("Now, provide your environment variables:")
 options = {
   app: app,
   domain: domain,
+  email: email,
+  env_vars: env_vars,
   postgresql: postgresql,
   redis: redis,
-  https: https,
-  env_vars: env_vars
+  ssl: ssl
 }
 
 instructions = Dokku.new(options).instructions
@@ -57,14 +62,12 @@ puts ""
 puts ""
 puts "#{pastel.yellow.bold("TO CREATE YOUR APP")} \n"
 puts divider
-instructions[:create].each { |instruction| puts pastel.yellow(instruction) }
+puts pastel.yellow(instructions[:create].join("\n"))
 
 deploy_instructions = instructions[:deploy].join("\n")
 puts ""
 puts "#{pastel.yellow.bold("TO DEPLOY YOUR APP")} \n"
 puts divider
-
-puts ""
 puts "You need to set up your local git config to point to a dokku remote."
 puts "If you do not have one setup, go to your project and run:"
 puts ""
@@ -78,20 +81,25 @@ if (instructions[:after_deploy].length > 0)
   puts ""
   puts "#{pastel.yellow.bold("AFTER THE DEPLOY")} \n"
   puts divider
-
-  puts instructions[:after_deploy].join("\n")
+  puts "Once your code is on Dooku, you can run these commands:"
+  puts ""
+  puts pastel.yellow(instructions[:after_deploy].join("\n"))
 end
 
 if (instructions[:ssl].length > 0)
   puts ""
   puts "#{pastel.yellow.bold("SSL INSTRUCTIONS")} \n"
   puts divider
-
-  puts instructions[:ssl].join("\n")
+  puts "Execute these commands only after your app is up and running without SSL."
+  puts "If you try to use them before that, Letsencrypt will fail to reach it."
+  puts ""
+  puts pastel.yellow(instructions[:ssl].join("\n"))
 end
 
 puts ""
 puts "#{pastel.yellow.bold("TO REMOVE YOUR APP")} \n"
 puts divider
-
-puts instructions[:destroy].join("\n")
+puts "Some of the next instructions wait for a Y/N confirmation."
+puts "We highly recommend that you run one at a time:"
+puts ""
+puts pastel.yellow(instructions[:destroy].join("\n"))
