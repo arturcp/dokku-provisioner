@@ -53,7 +53,9 @@ class Dokku
   end
 
   def deploy_instructions
-    []
+    [
+      "git remote add dokku dokku@#{dokku_ip_address}:#{@app}"
+    ]
   end
 
   def destroy_app_instructions
@@ -69,9 +71,10 @@ class Dokku
       @env_vars.map do |var|
         "dokku config:set --no-restart #{@app} #{var.strip.chomp}"
       end
-      # @env_vars.split("\n").map do |var|
-      #   "dokku config:set --no-restart #{@app} #{var.strip}"
-      # end
     end
+  end
+
+  def dokku_ip_address
+    ENV.fetch("DOKKU_IP_ADDRESS", "<IP ADDRESS>")
   end
 end

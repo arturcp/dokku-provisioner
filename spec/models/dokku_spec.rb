@@ -117,5 +117,19 @@ RSpec.describe Dokku, type: :model do
       it { expect(instructions).to include("dokku proxy:ports-set unity-bit http:80:5000") }
 
     end
+
+    context "deploy" do
+      let(:instructions) { dokku.instructions[:deploy] }
+
+      context "when dokku ip is set on .env" do
+        before { allow(dokku).to receive(:dokku_ip_address).and_return("192.168.1.1") }
+
+        it { expect(instructions).to include("git remote add dokku dokku@192.168.1.1:unity-bit") }
+      end
+
+      context "when dokku ip is not set on .env" do
+        it { expect(instructions).to include("git remote add dokku dokku@<IP ADDRESS>:unity-bit") }
+      end
+    end
   end
 end
