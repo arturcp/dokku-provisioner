@@ -3,7 +3,7 @@
 require "tty-prompt"
 require "tty-spinner"
 
-require_relative "models/commands.rb"
+require_relative "models/dokku.rb"
 
 pastel = Pastel.new
 prompt = TTY::Prompt.new(active_color: :yellow, interrupt: :exit)
@@ -35,23 +35,45 @@ puts "SITE_URL=https://my.site.com"
 puts "SECRET_TOKEN=ABCD1234"
 puts "WEBHOOK_URL=https://my.webhook.com/message"
 puts ""
-env_vars = prompt.ask("Now, provide your environment variables:")
+
+env_vars = prompt.multiline("Now, provide your environment variables:")
 
 options = {
-  app: @app,
-  domain: @domain,
-  postgresql: @postgresql,
-  redis: @redis,
-  https: @https,
-  env_vars: @env_vars
+  app: app,
+  domain: domain,
+  postgresql: postgresql,
+  redis: redis,
+  https: https,
+  env_vars: env_vars
 }
 
-commands = Commands.new(options)
+instructions = Dokku.new(options).instructions
 
 puts ""
-puts "#{pastel.yellow.bold("LIST OF COMMANDS TO CREATE YOUR APP")} \n\n"
-puts commands.to_create_app.join("\n")
+puts "#{pastel.yellow.bold("TO CREATE YOUR APP")} \n"
+puts "==================================================\n"
+puts instructions[:create].join("\n")
 
 puts ""
-puts "#{pastel.yellow.bold("LIST OF COMMANDS TO REMOVE YOUR APP")} \n\n"
-puts commands.to_remove_app.join("\n")
+puts "#{pastel.yellow.bold("TO DEPLOY YOUR APP")} \n"
+puts "==================================================\n"
+puts instructions[:deploy].join("\n")
+
+if (instructions[:after_deploy].length > 0)
+  puts ""
+  puts "#{pastel.yellow.bold("AFTER THE DEPLOY")} \n"
+  puts "==================================================\n"
+  puts instructions[:after_deploy].join("\n")
+end
+
+if (instructions[:ssl].length > 0)
+  puts ""
+  puts "#{pastel.yellow.bold("SSL INSTRUCTIONS")} \n"
+  puts "==================================================\n"
+  puts instructions[:ssl].join("\n")
+end
+
+puts ""
+puts "#{pastel.yellow.bold("TO REMOVE YOUR APP")} \n"
+puts "==================================================\n"
+puts instructions[:destroy].join("\n")
