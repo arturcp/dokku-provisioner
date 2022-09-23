@@ -2,7 +2,7 @@
 
 class Commands
   def initialize(options = {})
-    @app = options[:app]
+    @app = options[:app].to_s.downcase
     @domain = options[:domain]
     @env_vars = options[:env_vars]
     @postgresql = options[:postgresql]
@@ -28,6 +28,7 @@ class Commands
 
     all_env_vars.each { |env_var_line| commands << env_var_line }
 
+    commands << "dokku domains:add #{@app} #{@domain}" if @domain && !@domain.empty?
     commands << "dokku proxy:ports-set #{@app} http:80:5000"
 
     commands
@@ -38,8 +39,8 @@ class Commands
 
   def all_env_vars
     @all_env_vars ||= begin
-      env_vars.split("\n").map do |var|
-        "dokku config:set --no-restart #{@app} #{var}"
+      @env_vars.split("\n").map do |var|
+        "dokku config:set --no-restart #{@app} #{var.strip}"
       end
     end
   end

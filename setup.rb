@@ -38,12 +38,12 @@ puts ""
 env_vars = prompt.ask("Now, provide your environment variables:")
 
 options = {
-  app:,
-  domain:,
-  postgresql:,
-  redis:,
-  https:,
-  env_vars:
+  app: @app,
+  domain: @domain,
+  postgresql: @postgresql,
+  redis: @redis,
+  https: @https,
+  env_vars: @env_vars
 }
 
 commands = Commands.new(options)
