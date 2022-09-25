@@ -6,6 +6,16 @@ In 2022, Heroku has [recently decided to discontinue the free plans](https://hel
 
 The objective of this project is to shorten the learning curve for those who want to use Dokku. It is a ruby script that will ask questions about the app that will be installed and will list the commands you need to run to have you app up and running in no time.
 
+# How to use it
+
+In the terminal, at the root folder of this app, run:
+
+```
+ruby setup.rb
+```
+
+Then, follow the instructions on your dokku server.
+
 # Tests
 
 To run the tests, use Rspec's command:
