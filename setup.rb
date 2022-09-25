@@ -86,7 +86,7 @@ if (instructions[:after_deploy].length > 0)
   puts pastel.yellow(instructions[:after_deploy].join("\n"))
 end
 
-if (instructions[:ssl].length > 0)
+if ssl
   puts ""
   puts "#{pastel.yellow.bold("SSL INSTRUCTIONS")} \n"
   puts divider
