@@ -85,7 +85,7 @@ class Dokku
   def ssl_instructions
     commands = []
 
-    commands << "dokku config:set --no-restart #{@app} DOKKU_LETSENCRYPT_EMAIL=#{@email}"
+    commands << "dokku letsencrypt:set #{@app} email #{@email}"
     commands << "dokku letsencrypt:enable #{@app}"
     commands << "dokku letsencrypt:cron-job --add"
     commands << "dokku proxy:ports-set #{@app} http:80:5000 https:443:5000"
