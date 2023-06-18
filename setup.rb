@@ -81,7 +81,7 @@ if (instructions[:after_deploy].length > 0)
   puts ""
   puts "#{pastel.yellow.bold("AFTER THE DEPLOY")} \n"
   puts divider
-  puts "Once your code is on Dooku, you can run these commands:"
+  puts "Once your code is on Dokku, you can run these commands:"
   puts ""
   puts pastel.yellow(instructions[:after_deploy].join("\n"))
 end
