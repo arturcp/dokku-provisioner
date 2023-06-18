@@ -38,11 +38,13 @@ class Dokku
     commands << "dokku git:initialize #{@app}"
 
     if @postgresql
+      commands << "dokku plugin:install https://github.com/dokku/dokku-postgres.git"
       commands << "dokku postgres:create #{@app}-database"
       commands << "dokku postgres:link #{@app}-database #{@app}"
     end
 
     if @redis
+      commands << "dokku plugin:install https://github.com/dokku/dokku-redis.git redis"
       commands << "dokku redis:create #{@app}-redis"
       commands << "dokku redis:link #{@app}-redis #{@app}"
     end
@@ -85,7 +87,8 @@ class Dokku
   def ssl_instructions
     commands = []
 
-    commands << "dokku config:set --no-restart #{@app} DOKKU_LETSENCRYPT_EMAIL=#{@email}"
+    commands << "dokku plugin:install https://github.com/dokku/dokku-letsencrypt.git"
+    commands << "dokku letsencrypt:set #{@app} email #{@email}"
     commands << "dokku letsencrypt:enable #{@app}"
     commands << "dokku letsencrypt:cron-job --add"
     commands << "dokku proxy:ports-set #{@app} http:80:5000 https:443:5000"
