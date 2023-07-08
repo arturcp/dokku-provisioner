@@ -45,6 +45,8 @@ puts ""
 
 env_vars = prompt.multiline("Now, provide your environment variables:")
 
+postgresql_backup = postgresql && prompt.yes?("Do you need to regularly backup your database?")
+
 options = {
   app: app,
   domain: domain,
@@ -52,7 +54,8 @@ options = {
   env_vars: env_vars,
   postgresql: postgresql,
   redis: redis,
-  ssl: ssl
+  ssl: ssl,
+  postgresql_backup: postgresql_backup
 }
 
 instructions = Dokku.new(options).instructions
@@ -63,6 +66,13 @@ puts ""
 puts "#{pastel.yellow.bold("TO CREATE YOUR APP")} \n"
 puts divider
 puts pastel.yellow(instructions[:create].join("\n"))
+
+if instructions[:postgresql_backup].length > 0
+  puts ""
+  puts "You will need to run these commands to setup the backup of your database:"
+  puts ""
+  puts pastel.yellow(instructions[:postgresql_backup].join("\n"))
+end
 
 deploy_instructions = instructions[:deploy].join("\n")
 puts ""
@@ -77,7 +87,7 @@ puts "If you do and need to change the remote url, run this instead:"
 puts ""
 puts pastel.yellow(deploy_instructions.gsub("remote add", "remote set-url"))
 
-if (instructions[:after_deploy].length > 0)
+if instructions[:after_deploy].length > 0
   puts ""
   puts "#{pastel.yellow.bold("AFTER THE DEPLOY")} \n"
   puts divider

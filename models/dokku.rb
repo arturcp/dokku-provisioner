@@ -9,6 +9,7 @@ class Dokku
     @redis = options[:redis]
     @ssl = options[:ssl]
     @email = options[:email]
+    @postgresql_backup = options[:postgresql_backup]
   end
 
   def instructions
@@ -17,7 +18,8 @@ class Dokku
       create: create_app_instructions,
       deploy: deploy_instructions,
       destroy: destroy_app_instructions,
-      ssl: ssl_instructions
+      ssl: ssl_instructions,
+      postgresql_backup: postgresql_backup_instructions
     }
   end
 
@@ -29,6 +31,14 @@ class Dokku
     [
       "dokku ps:scale #{@app} worker=1"
     ]
+  end
+
+  def all_env_vars
+    @all_env_vars ||= begin
+      @env_vars.map do |var|
+        "dokku config:set --no-restart #{@app} #{var.strip.chomp}"
+      end
+    end
   end
 
   def create_app_instructions
@@ -84,6 +94,22 @@ class Dokku
     commands
   end
 
+  def dokku_ip_address
+    ENV.fetch("DOKKU_IP_ADDRESS", "<IP ADDRESS>")
+  end
+
+  def postgresql_backup_instructions
+    return [] unless @postgresql_backup
+
+    database = "#{@app}-database"
+
+    [
+      "dokku postgres:backup-auth #{database} #{ENV.fetch("AWS_ACCESS_KEY_ID", "<AWS_ACCESS_KEY_ID>")} #{ENV.fetch("AWS_SECRET_ACCESS_KEY", "<AWS_SECRET_ACCESS_KEY>")}",
+      "dokku postgres:backup #{database} <bucket_path>",
+      "dokku postgres:backup-schedule #{database} \"0 3 * * *\" <bucket_path>"
+    ]
+  end
+
   def ssl_instructions
     commands = []
 
@@ -94,17 +120,5 @@ class Dokku
     commands << "dokku proxy:ports-set #{@app} http:80:5000 https:443:5000"
 
     commands
-  end
-
-  def all_env_vars
-    @all_env_vars ||= begin
-      @env_vars.map do |var|
-        "dokku config:set --no-restart #{@app} #{var.strip.chomp}"
-      end
-    end
-  end
-
-  def dokku_ip_address
-    ENV.fetch("DOKKU_IP_ADDRESS", "<IP ADDRESS>")
   end
 end
