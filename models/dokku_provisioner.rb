@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class DokkuSetup
+class DokkuProvisioner
   def initialize(options = {})
     @app = options[:app].to_s.downcase.gsub(" ", "-")
     @domain = options[:domain]
@@ -8,7 +8,7 @@ class DokkuSetup
     @postgresql = options[:postgresql]
     @redis = options[:redis]
     @ssl = options[:ssl]
-    @email = options[:email]
+    @ssl_email = options[:ssl_email]
     @postgresql_backup = options[:postgresql_backup]
   end
 
@@ -114,7 +114,7 @@ class DokkuSetup
     commands = []
 
     commands << "dokku plugin:install https://github.com/dokku/dokku-letsencrypt.git"
-    commands << "dokku letsencrypt:set #{@app} email #{@email}"
+    commands << "dokku letsencrypt:set #{@app} email #{@ssl_email}"
     commands << "dokku letsencrypt:enable #{@app}"
     commands << "dokku letsencrypt:cron-job --add"
     commands << "dokku proxy:ports-set #{@app} http:80:5000 https:443:5000"

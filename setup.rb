@@ -5,7 +5,7 @@ require "tty-prompt"
 require "tty-spinner"
 require "tty-font"
 
-require_relative "models/dokku_setup.rb"
+require_relative "models/dokku_provisioner.rb"
 require_relative "models/questions.rb"
 require_relative "models/questionnaire/config.rb"
 
@@ -32,7 +32,7 @@ puts "Press #{pastel.yellow.bold("ENTER")} to proceed..."
 puts ""
 gets.chomp
 
-puts questions.pose
+answers = questions.pose_all
 
 # app = prompt.ask("Name of the app:") { |q| q.required(true) }
 # domain = prompt.ask("Domain:") { |q| q.required(true) }
@@ -81,58 +81,58 @@ puts questions.pose
 #   postgresql_backup: postgresql_backup
 # }
 
-# instructions = DokkuSetup.new(options).instructions
+instructions = DokkuProvisioner.new(answers).instructions
 
-# puts ""
-# puts ""
-# puts ""
-# puts "#{pastel.yellow.bold("TO CREATE YOUR APP")} \n"
-# puts divider
-# puts pastel.yellow(instructions[:create].join("\n"))
+puts ""
+puts ""
+puts ""
+puts "#{pastel.yellow.bold("TO CREATE YOUR APP")} \n"
+puts divider
+puts pastel.yellow(instructions[:create].join("\n"))
 
-# if instructions[:postgresql_backup].length > 0
-#   puts ""
-#   puts "You will need to run these commands to setup the backup of your database:"
-#   puts ""
-#   puts pastel.yellow(instructions[:postgresql_backup].join("\n"))
-# end
+if instructions[:postgresql_backup].length > 0
+  puts ""
+  puts "You will need to run these commands to setup the backup of your database:"
+  puts ""
+  puts pastel.yellow(instructions[:postgresql_backup].join("\n"))
+end
 
-# deploy_instructions = instructions[:deploy].join("\n")
-# puts ""
-# puts "#{pastel.yellow.bold("TO DEPLOY YOUR APP")} \n"
-# puts divider
-# puts "You need to set up your local git config to point to a dokku remote."
-# puts "If you do not have one setup, go to your project and run:"
-# puts ""
-# puts pastel.yellow(deploy_instructions)
-# puts ""
-# puts "If you do and need to change the remote url, run this instead:"
-# puts ""
-# puts pastel.yellow(deploy_instructions.gsub("remote add", "remote set-url"))
+deploy_instructions = instructions[:deploy].join("\n")
+puts ""
+puts "#{pastel.yellow.bold("TO DEPLOY YOUR APP")} \n"
+puts divider
+puts "You need to set up your local git config to point to a dokku remote."
+puts "If you do not have one setup, go to your project and run:"
+puts ""
+puts pastel.yellow(deploy_instructions)
+puts ""
+puts "If you do and need to change the remote url, run this instead:"
+puts ""
+puts pastel.yellow(deploy_instructions.gsub("remote add", "remote set-url"))
 
-# if instructions[:after_deploy].length > 0
-#   puts ""
-#   puts "#{pastel.yellow.bold("AFTER THE DEPLOY")} \n"
-#   puts divider
-#   puts "Once your code is on Dokku, you can run these commands:"
-#   puts ""
-#   puts pastel.yellow(instructions[:after_deploy].join("\n"))
-# end
+if instructions[:after_deploy].length > 0
+  puts ""
+  puts "#{pastel.yellow.bold("AFTER THE DEPLOY")} \n"
+  puts divider
+  puts "Once your code is on Dokku, you can run these commands:"
+  puts ""
+  puts pastel.yellow(instructions[:after_deploy].join("\n"))
+end
 
-# if ssl
-#   puts ""
-#   puts "#{pastel.yellow.bold("SSL INSTRUCTIONS")} \n"
-#   puts divider
-#   puts "Execute these commands only after your app is up and running without SSL."
-#   puts "If you try to use them before that, Letsencrypt will fail to reach it."
-#   puts ""
-#   puts pastel.yellow(instructions[:ssl].join("\n"))
-# end
+if ssl
+  puts ""
+  puts "#{pastel.yellow.bold("SSL INSTRUCTIONS")} \n"
+  puts divider
+  puts "Execute these commands only after your app is up and running without SSL."
+  puts "If you try to use them before that, Letsencrypt will fail to reach it."
+  puts ""
+  puts pastel.yellow(instructions[:ssl].join("\n"))
+end
 
-# puts ""
-# puts "#{pastel.yellow.bold("TO REMOVE YOUR APP")} \n"
-# puts divider
-# puts "Some of the next instructions wait for a Y/N confirmation."
-# puts "We highly recommend that you run one at a time:"
-# puts ""
-# puts pastel.yellow(instructions[:destroy].join("\n"))
+puts ""
+puts "#{pastel.yellow.bold("TO REMOVE YOUR APP")} \n"
+puts divider
+puts "Some of the next instructions wait for a Y/N confirmation."
+puts "We highly recommend that you run one at a time:"
+puts ""
+puts pastel.yellow(instructions[:destroy].join("\n"))

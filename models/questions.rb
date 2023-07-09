@@ -25,7 +25,7 @@ class Questions
     @config = config
   end
 
-  def pose
+  def pose_all
     LIST_OF_QUESTIONS.each_with_object({}) do |question, answers|
       question = question.new(answers: answers, config: config)
 
