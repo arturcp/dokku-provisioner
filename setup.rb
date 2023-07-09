@@ -3,17 +3,34 @@
 require "dotenv/load"
 require "tty-prompt"
 require "tty-spinner"
+require "tty-font"
 
 require_relative "models/dokku_setup.rb"
 require_relative "models/questions.rb"
 require_relative "models/questionnaire/config.rb"
 
 pastel = Pastel.new
-prompt = TTY::Prompt.new(active_color: :yellow, interrupt: :exit)
-divider = "============================================================================\n\n"
+prompt = TTY::Prompt.new(active_color: :yellow, interrupt: :exit, prefix: pastel.cyan("[?] "))
+divider = "===================================================\n\n"
 
 config = Questionnaire::Config.new(divider: divider, pastel: pastel, prompt: prompt)
 questions = Questions.new(config)
+
+print "\e[2J\e[H"
+
+font = TTY::Font.new(:starwars)
+puts "#{pastel.yellow.bold(font.write("Dokku"))} \n"
+puts "#{pastel.yellow.bold(divider)} \n"
+
+puts "We are going to make some questions to help you setup your Dokku server. The sequence of questions may change depending on your answers,"
+puts "and the final list of commands will be generated based on your answers."
+puts ""
+puts "Bear in mind that it is your reponsibility to understand the commands and select those that will need to run on your server. Feel free to"
+puts "skip them. If you are not sure about something, please check the documentation at https://dokku.com/docs/getting-started/."
+puts ""
+puts "Press #{pastel.yellow.bold("ENTER")} to proceed..."
+puts ""
+gets.chomp
 
 puts questions.pose
 

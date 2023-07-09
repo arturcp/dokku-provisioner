@@ -27,7 +27,8 @@ class Questions
 
       next unless question.eligible?
 
-      answers.merge!(question.ask)
+      answer = question.ask
+      answers.merge!(answer)
     end
   end
 end

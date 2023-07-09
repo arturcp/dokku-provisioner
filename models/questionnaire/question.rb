@@ -8,7 +8,7 @@ module Questionnaire
 
     attr_reader :answers, :config
 
-    def_delegators :@config, :prompt, :pastel, :divider
+    def_delegators :@config, :divider, :pastel, :prompt
 
     def initialize(answers:, config:)
       @answers = answers

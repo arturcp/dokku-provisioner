@@ -12,7 +12,7 @@ module Questionnaire
 
       def ask
         selected_tools = prompt.multi_select("Choose the tools you will need",
-          AVAILABLE_TOOLS, per_page: AVAILABLE_TOOLS.length, echo: false)
+          AVAILABLE_TOOLS, per_page: AVAILABLE_TOOLS.length, echo: true)
 
         {
           postgresql: selected_tools.include?("Postgresql"),
