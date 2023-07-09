@@ -3,16 +3,20 @@
 require_relative "questionnaire/questions/app_name"
 require_relative "questionnaire/questions/domain"
 require_relative "questionnaire/questions/tools"
+require_relative "questionnaire/questions/postgresql_backup"
 require_relative "questionnaire/questions/ssl"
 require_relative "questionnaire/questions/ssl_email"
+require_relative "questionnaire/questions/env_vars"
 
 class Questions
   LIST_OF_QUESTIONS = [
     Questionnaire::Questions::AppName,
     Questionnaire::Questions::Domain,
     Questionnaire::Questions::Tools,
+    Questionnaire::Questions::PostgresqlBackup,
     Questionnaire::Questions::SSL,
-    Questionnaire::Questions::SSLEmail
+    Questionnaire::Questions::SSLEmail,
+    Questionnaire::Questions::EnvVars
   ].freeze
 
   attr_reader :config
