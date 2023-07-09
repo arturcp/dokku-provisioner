@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Dokku
+class DokkuSetup
   def initialize(options = {})
     @app = options[:app].to_s.downcase.gsub(" ", "-")
     @domain = options[:domain]
