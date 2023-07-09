@@ -33,54 +33,6 @@ puts ""
 gets.chomp
 
 answers = questions.pose_all
-
-# app = prompt.ask("Name of the app:") { |q| q.required(true) }
-# domain = prompt.ask("Domain:") { |q| q.required(true) }
-
-# tools = [
-#   "Postgresql",
-#   "Redis"
-# ]
-
-# selected_tools = prompt.multi_select("Choose the tools you will need", tools,
-#   per_page: tools.length, echo: false)
-
-# postgresql = selected_tools.include?("Postgresql")
-# redis = selected_tools.include?("Redis")
-
-# ssl = prompt.yes?("Do you need a SSL certificate?")
-
-# if ssl
-#   email = prompt.ask("SSL requires an email address:") { |q| q.required(true) }
-# end
-
-# puts ""
-# puts "Environment variables"
-# puts divider
-# puts ""
-# puts "You can paste all your env vars at once. Make sure they are one per line "
-# puts "and in the format KEY=value, like this:"
-# puts ""
-# puts "SITE_URL=https://my.site.com"
-# puts "SECRET_TOKEN=ABCD1234"
-# puts "WEBHOOK_URL=https://my.webhook.com/message"
-# puts ""
-
-# env_vars = prompt.multiline("Now, provide your environment variables:")
-
-# postgresql_backup = postgresql && prompt.yes?("Do you need to regularly backup your database?")
-
-# options = {
-#   app: app,
-#   domain: domain,
-#   email: email,
-#   env_vars: env_vars,
-#   postgresql: postgresql,
-#   redis: redis,
-#   ssl: ssl,
-#   postgresql_backup: postgresql_backup
-# }
-
 instructions = DokkuProvisioner.new(answers).instructions
 
 puts ""
@@ -119,7 +71,7 @@ if instructions[:after_deploy].length > 0
   puts pastel.yellow(instructions[:after_deploy].join("\n"))
 end
 
-if ssl
+if answers[:ssl]
   puts ""
   puts "#{pastel.yellow.bold("SSL INSTRUCTIONS")} \n"
   puts divider
