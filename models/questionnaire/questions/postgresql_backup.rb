@@ -32,7 +32,7 @@ module Questionnaire
 
         database = "#{app}-database"
 
-        data.database << Instruction.information("\n\nTo backup your database, you first configure your S3 credentials:")
+        data.database << Instruction.information("\n\nTo backup your database, you first need configure your S3 credentials:")
         data.database << Instruction.command("dokku postgres:backup-auth #{database} #{aws_access_key_id} #{aws_secret_access_key}")
 
         data.database << Instruction.information("\n\nTo manually create a backup, run this command:")

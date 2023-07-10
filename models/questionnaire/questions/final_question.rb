@@ -13,7 +13,8 @@ module Questionnaire
         puts ""
         puts "The steps to provision #{pastel.yellow.bold(app)} app are ready. Press #{pastel.yellow.bold("ENTER")} to proceed..."
         puts ""
-        gets.chomp
+
+        request_enter_to_continue
       end
 
       def setup_instructions
@@ -21,6 +22,10 @@ module Questionnaire
 
         data.removing_app << Instruction.command("dokku proxy:clear-config #{app}")
         data.removing_app << Instruction.command("dokku apps:destroy #{app}")
+      end
+
+      def request_enter_to_continue
+        gets.chomp
       end
     end
   end

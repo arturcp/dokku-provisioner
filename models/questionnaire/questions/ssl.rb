@@ -22,8 +22,8 @@ module Questionnaire
         app = data.answers[:app]
         ssl_email = data.answers[:ssl_email]
 
-        data.prerequisite << Instruction.command("dokku plugin:install https://github.com/dokku/dokku-letsencrypt.git")
-        data.prerequisite << Instruction.command("dokku letsencrypt:cron-job --add")
+        data.prerequisites << Instruction.command("dokku plugin:install https://github.com/dokku/dokku-letsencrypt.git")
+        data.prerequisites << Instruction.command("dokku letsencrypt:cron-job --add")
 
 
         data.ssl << Instruction.command("dokku letsencrypt:set #{app} email #{ssl_email}")

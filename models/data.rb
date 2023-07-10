@@ -22,7 +22,7 @@ class Data
         Instruction.information("your live and the future maintenance of your apps, we are going to use the name of "),
         Instruction.information("your app with the suffix '-database'. For example, if your app is called 'my-app', "),
         Instruction.information("your database will be called 'my-app-database'.\n\n"),
-        Instruction.information("Now, run the following commands on your server:\n\n")
+        Instruction.information("Now, let's dive into the commands.\n\n")
       ],
       redis: [
         Instruction.information("When using redis in your app, you need to choose a name for it. To simplify your"),
@@ -60,7 +60,7 @@ class Data
     @instructions[:deploying_app]
   end
 
-  def prerequisite
+  def prerequisites
     @instructions[:prerequisites]
   end
 

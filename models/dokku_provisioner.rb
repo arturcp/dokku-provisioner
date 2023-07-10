@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+require "pastel"
+require "tty-prompt"
+
+
 require_relative "data"
 require_relative "questionnaire/questions/app_name"
 require_relative "questionnaire/questions/domain"

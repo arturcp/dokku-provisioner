@@ -28,7 +28,7 @@ module Questionnaire
       private
 
       def setup_postgresql(app)
-        data.prerequisite << Instruction.command(
+        data.prerequisites << Instruction.command(
           "dokku plugin:install https://github.com/dokku/dokku-postgres.git")
 
         data.database << Instruction.command("dokku postgres:create #{app}-database")
@@ -39,7 +39,7 @@ module Questionnaire
       end
 
       def setup_redis(app)
-        data.prerequisite << Instruction.command(
+        data.prerequisites << Instruction.command(
           "dokku plugin:install https://github.com/dokku/dokku-redis.git redis")
 
         data.redis << Instruction.command("dokku redis:create #{app}-redis")

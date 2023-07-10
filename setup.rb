@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 require "dotenv/load"
+require "pastel"
 require "tty-prompt"
-require "tty-spinner"
 require "tty-font"
 
 require_relative "models/dokku_provisioner.rb"
