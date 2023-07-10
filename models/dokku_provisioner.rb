@@ -4,6 +4,7 @@ require "pastel"
 require "tty-prompt"
 
 require_relative "data"
+require_relative "questionnaire/questions/server"
 require_relative "questionnaire/questions/app_name"
 require_relative "questionnaire/questions/domain"
 require_relative "questionnaire/questions/env_vars"
@@ -14,6 +15,7 @@ require_relative "questionnaire/questions/tools"
 
 class DokkuProvisioner
   LIST_OF_QUESTIONS = [
+    Questionnaire::Questions::Server,
     Questionnaire::Questions::AppName,
     Questionnaire::Questions::Domain,
     Questionnaire::Questions::Tools,

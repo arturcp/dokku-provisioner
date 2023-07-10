@@ -54,7 +54,9 @@ The simplest way to start is by duplicating the .env.example file and renaming i
 .env example:
 
 ```
-DOKKU_IP_ADDRESS=127.0.0.1
+DOKKU_SERVERS=127.0.0.1,my-host.com
 AWS_ACCESS_KEY_ID=AAAAABBBBB1231401010
 AWS_SECRET_ACCESS_KEY=ABCDEFGHIJKLMNOPQRSTUVWXYZ
 ```
+
+DOkKU_SERVERS is a special variable. If it is empty, you will see a placeholder on the instructions output. Else, it can hold any number of IP addresses or hostnames, separated by commas. If you have more than one server, the script will ask you which one you want to use.

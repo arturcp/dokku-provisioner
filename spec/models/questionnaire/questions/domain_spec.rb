@@ -29,6 +29,7 @@ RSpec.describe Questionnaire::Questions::Domain do
 
     before do
       data.add_answer(:app, app_name)
+      data.add_answer(:server, "<HOSTNAME OR IP ADDRESS>")
     end
 
     context "when domain is provided" do
@@ -82,7 +83,7 @@ RSpec.describe Questionnaire::Questions::Domain do
 
       expect(deploying_app_instructions[3]).to be_a(Instruction)
       expect(deploying_app_instructions[3].type).to eq(:command)
-      expect(deploying_app_instructions[3].text).to eq("git remote add dokku dokku@<IP ADDRESS>:#{app_name}")
+      expect(deploying_app_instructions[3].text).to eq("git remote add dokku dokku@<HOSTNAME OR IP ADDRESS>:#{app_name}")
 
       expect(deploying_app_instructions[4]).to be_a(Instruction)
       expect(deploying_app_instructions[4].type).to eq(:information)
@@ -90,7 +91,7 @@ RSpec.describe Questionnaire::Questions::Domain do
 
       expect(deploying_app_instructions[5]).to be_a(Instruction)
       expect(deploying_app_instructions[5].type).to eq(:command)
-      expect(deploying_app_instructions[5].text).to eq("git remote set-url dokku dokku@<IP ADDRESS>:#{app_name}")
+      expect(deploying_app_instructions[5].text).to eq("git remote set-url dokku dokku@<HOSTNAME OR IP ADDRESS>:#{app_name}")
     end
   end
 end

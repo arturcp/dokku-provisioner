@@ -15,6 +15,7 @@ module Questionnaire
       def setup_instructions
         app = data.answers[:app]
         domain = data.answers[:domain]
+        server = data.answers[:server]
 
         if domain && !domain.empty?
           data.creating_app << Instruction.command(
@@ -23,15 +24,9 @@ module Questionnaire
 
         data.deploying_app << Instruction.information("In your local environment, if you do not have a remote named `dokku` set, go to your")
         data.deploying_app << Instruction.information("project root folder and run:\n\n")
-        data.deploying_app << Instruction.command("git remote add dokku dokku@#{dokku_ip_address}:#{app}")
+        data.deploying_app << Instruction.command("git remote add dokku dokku@#{server}:#{app}")
         data.deploying_app << Instruction.information("\n\nHowever, if you already have it, you can change the IP address if needed:\n\n")
-        data.deploying_app << Instruction.command("git remote set-url dokku dokku@#{dokku_ip_address}:#{app}")
-      end
-
-      private
-
-      def dokku_ip_address
-        ENV.fetch("DOKKU_IP_ADDRESS", "<IP ADDRESS>")
+        data.deploying_app << Instruction.command("git remote set-url dokku dokku@#{server}:#{app}")
       end
     end
   end
