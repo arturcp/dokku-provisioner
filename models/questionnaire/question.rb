@@ -6,21 +6,25 @@ module Questionnaire
   class Question
     extend Forwardable
 
-    attr_reader :answers, :config
+    attr_reader :data
 
-    def_delegators :@config, :divider, :pastel, :prompt
-
-    def initialize(answers:, config:)
-      @answers = answers
-      @config = config
+    def initialize(data:)
+      @data = data
     end
 
     def eligible?
       true
     end
 
-    def variable_name
-      self.class::VARIABLE_NAME
+    private
+
+    def pastel
+      @pastel ||= Pastel.new
+    end
+
+    def prompt
+      @prompt ||= TTY::Prompt.new(active_color: :yellow, interrupt: :exit,
+        prefix: pastel.cyan("[?] "))
     end
   end
 end
