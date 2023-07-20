@@ -1,115 +1,54 @@
 # frozen_string_literal: true
 
-require 'dotenv/load'
+require "dotenv/load"
+require "pastel"
 require "tty-prompt"
-require "tty-spinner"
+require "tty-font"
 
-require_relative "models/dokku.rb"
+require_relative "models/dokku_provisioner.rb"
 
 pastel = Pastel.new
-prompt = TTY::Prompt.new(active_color: :yellow, interrupt: :exit)
+divider = "======================================================================================="
 
-divider = "============================================================================\n\n"
+provisioner = DokkuProvisioner.new
 
-app = prompt.ask("Name of the app:") { |q| q.required(true) }
-domain = prompt.ask("Domain:") { |q| q.required(true) }
+print "\e[2J\e[H"
 
-tools = [
-  "Postgresql",
-  "Redis"
-]
+font = TTY::Font.new(:starwars)
+puts "#{pastel.yellow.bold(font.write("Dokku"))} \n"
+puts "#{pastel.yellow.bold("===================================================")} \n"
 
-selected_tools = prompt.multi_select("Choose the tools you will need", tools,
-  per_page: tools.length, echo: false)
+puts "We are going to make some questions to help you setup your Dokku server. The sequence of questions may change depending on your answers,"
+puts "and the final list of commands will be generated based on your answers."
+puts ""
+puts "Bear in mind that it is your reponsibility to understand the commands and select those that will need to run on your server. Feel free to"
+puts "skip them. If you are not sure about something, please check the documentation at https://dokku.com/docs/getting-started/."
+puts ""
+puts "Press #{pastel.yellow.bold("ENTER")} to proceed..."
+puts ""
+gets.chomp
 
-postgresql = selected_tools.include?("Postgresql")
-redis = selected_tools.include?("Redis")
+data = provisioner.provision
 
-ssl = prompt.yes?("Do you need a SSL certificate?")
+puts ""
+data.instructions.keys.each do |key|
+  if data.show_section?(key)
+    title = key.to_s.gsub("_", " ").upcase
+    formatted_title = pastel.cyan.bold(title)
+    spaces_count = ((divider.length - title.length - 2).to_f / 2).ceil
+    spaces = " " * spaces_count
 
-if ssl
-  email = prompt.ask("SSL requires an email address:") { |q| q.required(true) }
+    puts ""
+    puts divider
+    puts "|#{spaces}#{formatted_title}#{spaces}|\n"
+    puts divider
+    puts ""
+
+    data.instructions[key].each do |instruction|
+      provisioner.print_instruction(instruction)
+    end
+  end
 end
 
 puts ""
-puts "Environment variables"
-puts divider
 puts ""
-puts "You can paste all your env vars at once. Make sure they are one per line "
-puts "and in the format KEY=value, like this:"
-puts ""
-puts "SITE_URL=https://my.site.com"
-puts "SECRET_TOKEN=ABCD1234"
-puts "WEBHOOK_URL=https://my.webhook.com/message"
-puts ""
-
-env_vars = prompt.multiline("Now, provide your environment variables:")
-
-postgresql_backup = postgresql && prompt.yes?("Do you need to regularly backup your database?")
-
-options = {
-  app: app,
-  domain: domain,
-  email: email,
-  env_vars: env_vars,
-  postgresql: postgresql,
-  redis: redis,
-  ssl: ssl,
-  postgresql_backup: postgresql_backup
-}
-
-instructions = Dokku.new(options).instructions
-
-puts ""
-puts ""
-puts ""
-puts "#{pastel.yellow.bold("TO CREATE YOUR APP")} \n"
-puts divider
-puts pastel.yellow(instructions[:create].join("\n"))
-
-if instructions[:postgresql_backup].length > 0
-  puts ""
-  puts "You will need to run these commands to setup the backup of your database:"
-  puts ""
-  puts pastel.yellow(instructions[:postgresql_backup].join("\n"))
-end
-
-deploy_instructions = instructions[:deploy].join("\n")
-puts ""
-puts "#{pastel.yellow.bold("TO DEPLOY YOUR APP")} \n"
-puts divider
-puts "You need to set up your local git config to point to a dokku remote."
-puts "If you do not have one setup, go to your project and run:"
-puts ""
-puts pastel.yellow(deploy_instructions)
-puts ""
-puts "If you do and need to change the remote url, run this instead:"
-puts ""
-puts pastel.yellow(deploy_instructions.gsub("remote add", "remote set-url"))
-
-if instructions[:after_deploy].length > 0
-  puts ""
-  puts "#{pastel.yellow.bold("AFTER THE DEPLOY")} \n"
-  puts divider
-  puts "Once your code is on Dokku, you can run these commands:"
-  puts ""
-  puts pastel.yellow(instructions[:after_deploy].join("\n"))
-end
-
-if ssl
-  puts ""
-  puts "#{pastel.yellow.bold("SSL INSTRUCTIONS")} \n"
-  puts divider
-  puts "Execute these commands only after your app is up and running without SSL."
-  puts "If you try to use them before that, Letsencrypt will fail to reach it."
-  puts ""
-  puts pastel.yellow(instructions[:ssl].join("\n"))
-end
-
-puts ""
-puts "#{pastel.yellow.bold("TO REMOVE YOUR APP")} \n"
-puts divider
-puts "Some of the next instructions wait for a Y/N confirmation."
-puts "We highly recommend that you run one at a time:"
-puts ""
-puts pastel.yellow(instructions[:destroy].join("\n"))
