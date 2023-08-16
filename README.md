@@ -6,6 +6,8 @@ In 2022, Heroku has [decided to discontinue the free plans](https://help.heroku.
 
 The objective of this project is to shorten the learning curve for those who want to use Dokku. It is a ruby script that will ask questions about the app that will be installed and will list the commands you need to run to have you app up and running in no time.
 
+![](http://g.recordit.co/bMGYI0qwok.gif)
+
 # How to use it
 
 This is a pure ruby project, so you need to have ruby installed in your machine. If you don't have it, you can follow [this guide](https://www.ruby-lang.org/en/documentation/installation/) to install it.
