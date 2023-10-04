@@ -10,7 +10,7 @@ The objective of this project is to shorten the learning curve for those who wan
 
 # How to use it
 
-This is a pure ruby project, so you need to have ruby installed in your machine. If you don't have it, you can follow [this guide](https://www.ruby-lang.org/en/documentation/installation/) to install it.
+This is a pure ruby project, so you need to have ruby installed on your machine. If you don't have it, you can follow [this guide](https://www.ruby-lang.org/en/documentation/installation/) to install it.
 
 After cloning the project, you need to install the dependencies. To do that, run:
 
@@ -28,7 +28,7 @@ Then, follow the instructions on your dokku server.
 
 # Tests
 
-To run the tests, use rspec's command:
+To run the tests, use RSpec's command:
 
 ```
 rspec
@@ -49,9 +49,9 @@ dokku postgres:backup-auth api-database <AWS_ACCESS_KEY_ID> <AWS_SECRET_ACCESS_K
 git remote add dokku dokku@<IP ADDRESS>:api
 ```
 
-See those variables inside `<>`? You need to replace them with your own values when running the commands on your Dokku server. However, if you plan to install many apps on the same server, it gets boring to keep replacing the placeholders by the same values over and over again. That's why you can create a `.env` file at the root of this project and add the values you want to replace the placeholders with.
+See those variables inside `<>`? You need to replace them with your values when running the commands on your Dokku server. However, if you plan to install many apps on the same server, it gets boring to keep replacing the placeholders with the same values over and over again. That's why you can create a `.env` file at the root of this project and add the values you want to replace the placeholders with.
 
-The simplest way to start is by duplicating the .env.example file and renaming it to .env. Then, you can replace the values inside it with your own values (and fear not, the .env file is going to be ignored by git, so there is no risk of you committing any secret to the repository).
+The simplest way to start is by duplicating the .env.example file and renaming it to .env. Then, you can replace the values inside it with your values (and fear not, the .env file is going to be ignored by git, so there is no risk of you committing any secret to the repository).
 
 .env example:
 
@@ -61,4 +61,4 @@ AWS_ACCESS_KEY_ID=AAAAABBBBB1231401010
 AWS_SECRET_ACCESS_KEY=ABCDEFGHIJKLMNOPQRSTUVWXYZ
 ```
 
-DOkKU_SERVERS is a special variable. If it is empty, you will see a placeholder on the instructions output. Else, it can hold any number of IP addresses or hostnames, separated by commas. If you have more than one server, the script will ask you which one you want to use.
+DOkKU_SERVERS is a special variable. If it is empty, you will see a placeholder on the instructions output. Otherwise, it can hold any number of IP addresses or hostnames, separated by commas. If you have more than one server, the script will ask you which one you want to use.
