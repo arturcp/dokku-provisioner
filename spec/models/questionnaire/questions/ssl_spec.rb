@@ -92,7 +92,7 @@ RSpec.describe Questionnaire::Questions::SSL do
 
       expect(ssl_instructions[3]).to be_a(Instruction)
       expect(ssl_instructions[3].type).to eq(:command)
-      expect(ssl_instructions[3].text).to eq("dokku letsencrypt:enable #{@app}")
+      expect(ssl_instructions[3].text).to eq("dokku letsencrypt:enable #{app_name}")
     end
   end
 end

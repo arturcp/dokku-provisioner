@@ -27,7 +27,7 @@ module Questionnaire
 
 
         data.ssl << Instruction.command("dokku letsencrypt:set #{app} email #{ssl_email}")
-        data.ssl << Instruction.command("dokku letsencrypt:enable #{@app}")
+        data.ssl << Instruction.command("dokku letsencrypt:enable #{app}")
       end
     end
   end
