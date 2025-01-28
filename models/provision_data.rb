@@ -2,7 +2,7 @@
 
 require_relative "instruction"
 
-class Data
+class ProvisionData
   attr_reader :answers, :instructions
 
   def initialize
