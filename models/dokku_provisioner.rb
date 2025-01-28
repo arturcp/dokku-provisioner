@@ -3,7 +3,7 @@
 require "pastel"
 require "tty-prompt"
 
-require_relative "data"
+require_relative "provision_data"
 require_relative "questionnaire/questions/server"
 require_relative "questionnaire/questions/app_name"
 require_relative "questionnaire/questions/domain"
@@ -26,7 +26,7 @@ class DokkuProvisioner
   ].freeze
 
   def provision
-    Data.new.tap do |data|
+    ProvisionData.new.tap do |data|
       LIST_OF_QUESTIONS.each do |question|
         question = question.new(data: data)
 
