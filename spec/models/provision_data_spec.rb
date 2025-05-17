@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require_relative "../../models/data"
+require_relative "../../models/provision_data"
 require_relative "../../models/instruction"
 
-RSpec.describe Data do
+RSpec.describe ProvisionData do
   let(:data) { described_class.new }
 
   describe "#add_answer" do

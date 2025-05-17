@@ -18,7 +18,6 @@ module Questionnaire
 
         data.creating_app << Instruction.command("dokku apps:create #{app}")
         data.creating_app << Instruction.command("dokku git:initialize #{app}")
-        data.creating_app << Instruction.command("dokku proxy:ports-set #{app} http:80:5000")
       end
     end
   end

@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require_relative "../../../../models/data"
+require_relative "../../../../models/provision_data"
 require_relative "../../../../models/questionnaire/questions/app_name"
 require "tty-prompt"
 
 RSpec.describe Questionnaire::Questions::AppName do
   let(:app_name) { "my-app" }
-  let(:data) { Data.new }
+  let(:data) { ProvisionData.new }
   let(:prompt) { instance_double(TTY::Prompt) }
   let(:question) { described_class.new(data: data) }
 
@@ -41,10 +41,6 @@ RSpec.describe Questionnaire::Questions::AppName do
       expect(creating_app_instructions[1]).to be_a(Instruction)
       expect(creating_app_instructions[1].type).to eq(:command)
       expect(creating_app_instructions[1].text).to eq("dokku git:initialize my-app")
-
-      expect(creating_app_instructions[2]).to be_a(Instruction)
-      expect(creating_app_instructions[2].type).to eq(:command)
-      expect(creating_app_instructions[2].text).to eq("dokku proxy:ports-set my-app http:80:5000")
     end
   end
 end

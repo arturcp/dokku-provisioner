@@ -58,7 +58,7 @@ RSpec.describe DokkuProvisioner do
     end
 
     it "returns the data" do
-      expect(provisioner.provision).to be_a(Data)
+      expect(provisioner.provision).to be_a(ProvisionData)
     end
 
     it "returns the data with the answers" do
