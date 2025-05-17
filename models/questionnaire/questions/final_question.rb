@@ -20,7 +20,6 @@ module Questionnaire
       def setup_instructions
         app = data.answers[:app]
 
-        data.removing_app << Instruction.command("dokku proxy:clear-config #{app}")
         data.removing_app << Instruction.command("dokku apps:destroy #{app}")
       end
 
