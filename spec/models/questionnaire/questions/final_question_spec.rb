@@ -43,11 +43,7 @@ RSpec.describe Questionnaire::Questions::FinalQuestion do
 
       expect(removing_app_instructions[1]).to be_a(Instruction)
       expect(removing_app_instructions[1].type).to eq(:command)
-      expect(removing_app_instructions[1].text).to eq("dokku proxy:clear-config #{app_name}")
-
-      expect(removing_app_instructions[2]).to be_a(Instruction)
-      expect(removing_app_instructions[2].type).to eq(:command)
-      expect(removing_app_instructions[2].text).to eq("dokku apps:destroy #{app_name}")
+      expect(removing_app_instructions[1].text).to eq("dokku apps:destroy #{app_name}")
     end
   end
 end
