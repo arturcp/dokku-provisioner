@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "../../../models/data"
+require_relative "../../../models/provision_data"
 require_relative "../../../models/questionnaire/question"
 
 RSpec.describe Questionnaire::Question do

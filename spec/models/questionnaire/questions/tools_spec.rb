@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require_relative "../../../../models/data"
+require_relative "../../../../models/provision_data"
 require_relative "../../../../models/questionnaire/questions/tools"
 require "tty-prompt"
 
 RSpec.describe Questionnaire::Questions::Tools do
-  let(:data) { Data.new }
+  let(:data) { ProvisionData.new }
   let(:prompt) { instance_double(TTY::Prompt) }
   let(:question) { described_class.new(data: data) }
 
